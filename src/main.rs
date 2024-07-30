@@ -10,6 +10,7 @@ use tracing::{debug, error, info, trace, warn};
 use url::Url;
 use crate::cli::Cli;
 use crate::mango_fetcher::read_mints_from_file;
+use crate::oha_client::ROUTER_API_METHOD;
 use crate::oha_result::{read_error_text, read_oha_result};
 
 mod mango_fetcher;
@@ -29,6 +30,7 @@ async fn main()
 
     let router_base_api_url = Url::parse(&router_base_api_url).expect("URL parsing failed");
     info!("router_base_api_url: {}", router_base_api_url);
+    info!("method: '{}'", ROUTER_API_METHOD);
     info!("oha_bin_path: {}", &oha_bin_path);
     info!("oha version string: \"{}\"", oha_client::read_oha_version(&oha_bin_path));
     info!("limit: {}", limit);

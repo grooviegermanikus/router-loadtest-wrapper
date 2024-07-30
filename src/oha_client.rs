@@ -3,6 +3,8 @@ use reqwest::Url;
 use serde_json::Value;
 use solana_sdk::pubkey::Pubkey;
 
+pub const ROUTER_API_METHOD: &'static str = "quote";
+
 pub fn read_oha_version(oha_bin_path: &str) -> String {
     let output = Command::new(oha_bin_path)
         .args(&["--version"])
@@ -13,7 +15,7 @@ pub fn read_oha_version(oha_bin_path: &str) -> String {
 }
 
 pub fn call_quote(inputMint: &Pubkey, outputMint: &Pubkey, oha_bin_path: &str, router_api_base_url: Url) -> Value {
-    let router_api_url = build_router_api_url(inputMint, outputMint, router_api_base_url);
+    let router_api_url = build_router_quote_api_url(inputMint, outputMint, router_api_base_url);
 
     let mut args = Vec::new();
     args.push("--no-tui");
@@ -33,10 +35,11 @@ pub fn call_quote(inputMint: &Pubkey, outputMint: &Pubkey, oha_bin_path: &str, r
     json
 }
 
-fn build_router_api_url(inputMint: &Pubkey, outputMint: &Pubkey, base_url: Url) -> Url {
+
+fn build_router_quote_api_url(inputMint: &Pubkey, outputMint: &Pubkey, base_url: Url) -> Url {
     let mut router_api_url = base_url;
 
-    router_api_url.set_path("quote");
+    router_api_url.set_path(ROUTER_API_METHOD);
     {
         let mut query_params = router_api_url.query_pairs_mut();
         query_params.append_pair("inputMint", &inputMint.to_string());
