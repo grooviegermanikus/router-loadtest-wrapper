@@ -3,7 +3,7 @@ use reqwest::Url;
 use serde_json::Value;
 use solana_sdk::pubkey::Pubkey;
 
-pub fn call_quote(inputMint: &Pubkey, outputMint: &Pubkey, router_api_base_url: Url) -> Value {
+pub fn call_quote(inputMint: &Pubkey, outputMint: &Pubkey, oha_bin_path: &str, router_api_base_url: Url) -> Value {
     let router_api_url = build_router_api_url(inputMint, outputMint, router_api_base_url);
 
     let mut args = Vec::new();
@@ -13,7 +13,7 @@ pub fn call_quote(inputMint: &Pubkey, outputMint: &Pubkey, router_api_base_url: 
     args.push("-c2");
     args.push("-z1s");
 
-    let output = Command::new("oha")
+    let output = Command::new(oha_bin_path)
         .args(&args)
         .output()
         .expect("failed to execute 'oha' process");

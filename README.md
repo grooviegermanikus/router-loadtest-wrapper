@@ -1,12 +1,20 @@
 
 
 
-## Run
+## Setup + Run
+Prerequisites:
+- Rust
+- oha load test [download 1.3.0](https://github.com/hatoo/oha/releases/tag/v1.3.0)
+
 ```bash
 RUST_LOG=info cargo run -- --router-base-api-url https://router.example.com/
 ```
 
 
+```bash
+# use limit for faster testing roundtrip
+RUST_LOG=info cargo run -- --router-base-api-url https://router.example.com/ --limit 10
+```
 
 ## Examples
 

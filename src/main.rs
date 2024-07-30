@@ -1,4 +1,5 @@
 use std::collections::HashSet;
+use std::path::PathBuf;
 use std::process::Command;
 use std::str::FromStr;
 use clap::Parser;
@@ -22,12 +23,16 @@ async fn main()
     tracing_subscriber::fmt()
         .with_max_level(tracing::Level::INFO).init();
 
-    let Cli { router_base_api_url, limit } = Cli::parse();
+    let Cli { router_base_api_url, limit, oha_bin_path } = Cli::parse();
     let limit = limit.unwrap_or(999_999);
+    let oha_bin_path = oha_bin_path.unwrap_or("oha".to_string());
 
     let router_base_api_url = Url::parse(&router_base_api_url).expect("URL parsing failed");
     info!("router_base_api_url: {}", router_base_api_url);
+    info!("oha_bin_path: {}", &oha_bin_path);
     info!("limit: {}", limit);
+
+    std::fs::create_dir("output").unwrap_or_default();
 
     // let mango_metadata = mango_fetcher::fetch_mango_data().await.unwrap();
     // let mints = mango_metadata.mints;
@@ -50,7 +55,7 @@ async fn main()
     let mut report_fails_csv = csv::Writer::from_path("output/report-fails.csv").unwrap();
     report_fails_csv.write_record(&["input_mint", "output_mint", "error_text", "error_count"]).unwrap();
     for (input_mint, output_mint) in pairs.iter().take(limit) {
-        let result_json = oha_client::call_quote(input_mint, output_mint, router_base_api_url.clone());
+        let result_json = oha_client::call_quote(input_mint, output_mint, &oha_bin_path, router_base_api_url.clone());
         let res = read_oha_result(&result_json);
         let json = &result_json;
         info!("benching with input={}, output={}", input_mint, output_mint);
@@ -88,6 +93,7 @@ async fn main()
             }
         }
         report_success_csv.flush().unwrap();
+        report_fails_csv.flush().unwrap();
     }
     report_success_csv.flush().unwrap();
 

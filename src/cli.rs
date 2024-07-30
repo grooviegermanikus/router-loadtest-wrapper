@@ -9,6 +9,8 @@ pub struct Cli {
     /// Limit the number of pairs to check
     #[arg(short, long)]
     pub limit: Option<usize>,
+    #[arg(short, long)]
+    pub oha_bin_path: Option<String>,
 }
 
 
