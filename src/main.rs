@@ -87,6 +87,7 @@ async fn main()
                 error!("Failed to read error: {}", serde_json::to_string(&result_json).unwrap());
             }
         }
+        report_success_csv.flush().unwrap();
     }
     report_success_csv.flush().unwrap();
 
