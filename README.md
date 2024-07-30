@@ -7,7 +7,7 @@ Prerequisites:
 - oha load test [download 1.3.0](https://github.com/hatoo/oha/releases/tag/v1.3.0)
 
 ```bash
-RUST_LOG=info cargo run -- --router-base-api-url https://router.example.com/
+RUST_LOG=info cargo run --release -- --router-base-api-url https://router.example.com/
 ```
 
 

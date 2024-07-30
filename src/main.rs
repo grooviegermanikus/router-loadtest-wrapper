@@ -30,6 +30,7 @@ async fn main()
     let router_base_api_url = Url::parse(&router_base_api_url).expect("URL parsing failed");
     info!("router_base_api_url: {}", router_base_api_url);
     info!("oha_bin_path: {}", &oha_bin_path);
+    info!("oha version string: \"{}\"", oha_client::read_oha_version(&oha_bin_path));
     info!("limit: {}", limit);
 
     std::fs::create_dir("output").unwrap_or_default();

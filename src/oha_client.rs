@@ -3,6 +3,15 @@ use reqwest::Url;
 use serde_json::Value;
 use solana_sdk::pubkey::Pubkey;
 
+pub fn read_oha_version(oha_bin_path: &str) -> String {
+    let output = Command::new(oha_bin_path)
+        .args(&["--version"])
+        .output()
+        .expect("failed to execute 'oha' process");
+
+    String::from_utf8(output.stdout).unwrap().replace("\n", "")
+}
+
 pub fn call_quote(inputMint: &Pubkey, outputMint: &Pubkey, oha_bin_path: &str, router_api_base_url: Url) -> Value {
     let router_api_url = build_router_api_url(inputMint, outputMint, router_api_base_url);
 
